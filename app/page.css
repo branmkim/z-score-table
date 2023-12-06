@@ -1,0 +1,37 @@
+.cell-content {
+    transition: all 0.1s ease-in-out;
+}
+.focused:is(.mouse-hover, .mouse-set) {
+    transform: translate(0.25rem, -0.25rem);
+}
+.dynamic-width {
+    transition: width 0.1s;
+}
+.dynamic-margin {
+    transition: margin 0.1s;
+}
+
+.neg-light {
+    background-color: #ffffff;
+}
+.neg-accent {
+    background-color: #cccccc;
+}
+.pos-light {
+    background-color: #ffffff;
+}
+.pos-accent {
+    background-color: #cccccc;
+}
+.neg-header-light {
+    background-color: #dddddd;
+}
+.neg-header-accent {
+    background-color: #ffffff;
+}
+.pos-header-light {
+    background-color: #dddddd;
+}
+.pos-header-accent {
+    background-color: #ffffff;
+}
