@@ -56,7 +56,7 @@ export default function Home() {
                     { rows.map((r, ri) => {
                         return (
                             // row headers
-                            <div className={`flex flex-row ${mouseState != "none" && focus[0] == ri ? "sticky z-30 top-12" : null}`}>
+                            <div className={`flex flex-row ${mouseState != "none" && focus[0] == ri ? "sticky z-30 top-12" : null}`} key={`${ri}--1`}>
                                 <Cell pos={[ri, -1]} value={rows[ri]} rowIndex={ri}
                                     hsl={[0, 0, 90]}
                                     type="row" 
