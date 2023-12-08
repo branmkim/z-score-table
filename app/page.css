@@ -11,27 +11,34 @@
     transition: margin 0.1s;
 }
 
-.neg-light {
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.light-1 {
     background-color: #ffffff;
 }
-.neg-accent {
-    background-color: #cccccc;
-}
-.pos-light {
-    background-color: #ffffff;
-}
-.pos-accent {
-    background-color: #cccccc;
-}
-.neg-header-light {
+.accent-1 {
     background-color: #dddddd;
 }
-.neg-header-accent {
-    background-color: #ffffff;
+.light-2 {
+    background-color: #eeeeee;
 }
-.pos-header-light {
+.accent-2 {
     background-color: #dddddd;
 }
-.pos-header-accent {
+.header-light-1 {
+    background-color: #cccccc;
+}
+.header-accent-1 {
+    background-color: #ffffff;
+}
+.header-light-2 {
+    background-color: #bbbbbb;
+}
+.header-accent-2 {
     background-color: #ffffff;
 }

@@ -16,10 +16,9 @@ export default function Graph({ alpha }: GraphProps) {
                         width: 50 + ((50 / 3.5) * alpha) + "%",
                     }}
                 />
-                <img src="/blue_fill.svg" className={`dynamic-width absolute bottom-0 left-0 h-full object-cover object-${alpha < 0 ? "left" : "right"}`}
+                <img src="/blue_fill.svg" className={`dynamic-width absolute bottom-0 left-0 h-full object-cover object-left`}
                     style={{
-                        width: "50%",
-                        marginLeft: alpha < 0 ? 0 : "50%",
+                        width: alpha < 0 ? "50%" : "100%",
                     }}
                 />
                 <div className="dynamic-width z-30 absolute top-0 left-0"

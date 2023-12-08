@@ -6,6 +6,7 @@ import Latex from 'react-latex-next'
 import { rows, cols, values } from './constants'
 import './page.css'
 import Graph from './Graph'
+import Equation from './Equation'
 
 export default function Home() {
     const [focus, setFocus] = useState<[number , number ]>([34, 0])
@@ -15,9 +16,9 @@ export default function Home() {
     let zScore = values[focus[0]][focus[1]]
 
     return (
-        <main className="flex flex-col justify-start items-start p-4">
-            <h1 className="text-xl">Z-Score Table</h1>
-            <p>explanation of what a z-score is</p>
+        <main className="flex flex-col justify-start items-start px-4">
+            {/* <h1 className="text-xl">Z-Score Table</h1>
+            <p>explanation of what a z-score is</p> */}
             <div className="flex flex-row justify-start items-start">
                 <div className="z-graph sticky top-0 flex flex-col items-start justify-start w-1/3 pt-16 mr-4">
                     <Graph alpha={parseFloat(alpha)} />
@@ -36,8 +37,9 @@ export default function Home() {
                             <Latex>{`$1-z_{${alpha}}=${(1 - zScore).toFixed(4)}$`}</Latex>
                         }
                     </div>
+                    {/* <Equation /> */}
                 </div>            
-                <div className="z-table flex flex-col pt-4">
+                <div className="z-table flex flex-col">
                     <div className="bg-white z-20 sticky top-0 w-full h-4"></div>
                     {/* col headers */}
                     <div className="flex flex-row z-20 sticky top-4">
@@ -98,6 +100,8 @@ interface CellProps {
 function Cell({ pos, value, rowIndex, hsl, type, focus, setFocus, mouseState, setMouseState }: CellProps) {
     const [focused, setFocused] = useState<boolean>(false)
 
+    let alt = rowIndex % 10 < 5
+
     useEffect(() => {
         if (mouseState != "none") {
             if (type == "cell") {
@@ -144,14 +148,14 @@ function Cell({ pos, value, rowIndex, hsl, type, focus, setFocus, mouseState, se
                 'z-30 focused': mouseState != "none" && focused,
                 'z-0': !focused,
                 // colors
-                'neg-light': rowIndex <= 34 && type == "cell" && !focused,
-                'neg-accent': rowIndex <= 34 && type == "cell" && focused,
-                'pos-light': rowIndex > 34 && type == "cell" && !focused,
-                'pos-accent': rowIndex > 34 && type == "cell" && focused,
-                'neg-header-light': rowIndex <= 34 && type != "cell" && !focused,
-                'neg-header-accent': rowIndex <= 34 && type != "cell" && focused,
-                'pos-header-light': rowIndex > 34 && type != "cell" && !focused,
-                'pos-header-accent': rowIndex > 34 && type != "cell" && focused,
+                'light-1': alt && type == "cell" && !focused,
+                'accent-1': alt && type == "cell" && focused,
+                'light-2': !alt && type == "cell" && !focused,
+                'accent-2': !alt && type == "cell" && focused,
+                'header-light-1': alt && type != "cell" && !focused,
+                'header-accent-1': alt && type != "cell" && focused,
+                'header-light-2': !alt && type != "cell" && !focused,
+                'header-accent-2': !alt && type != "cell" && focused,
                 // borders
                 'border-black': true,
                 // full border around focused headers and cell
