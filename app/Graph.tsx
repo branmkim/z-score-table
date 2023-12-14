@@ -36,7 +36,11 @@ export default function Graph({ alpha }: GraphProps) {
                 marginLeft: 50 + ((50 / 3.5) * alpha) + "%",
                 transform: "translate(-50%, 0)"
             }}>
-                <Latex>{`$${ alpha }$`}</Latex>
+                <p style={{
+                    fontFamily: "computer modern",
+                }}>
+                    { alpha }
+                </p>
             </div>
         </div>
         </>

@@ -15,3 +15,8 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+
+@font-face {
+  font-family: 'computer modern';
+  src: url('/fonts/cmunrm.ttf');
+}

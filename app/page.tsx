@@ -9,11 +9,61 @@ import Graph from './Graph'
 import Equation from './Equation'
 
 export default function Home() {
-    const [focus, setFocus] = useState<[number , number ]>([34, 0])
+    const [focus, setFocus] = useState<[number, number]>([Math.ceil(values.length / 2) - 1, 0])
     const [mouseState, setMouseState] = useState<"none" | "hover" | "setting" | "set" | "releasing">("none")
 
-    let alpha = (rows[focus[0]] + Math.sign(focus[0] - 34.5) * cols[focus[1]]).toFixed(2) // string
-    let zScore = values[focus[0]][focus[1]]
+    const [alpha, setAlpha] = useState<number>(0.00)
+    const [zScore, setZScore] = useState<number>(0.00)
+
+
+    useEffect(() => {
+        setAlpha(parseFloat((rows[focus[0]] + Math.sign(focus[0] - Math.ceil(values.length / 2) - 0.5) * cols[focus[1]]).toFixed(2)))
+        setZScore(values[focus[0]][focus[1]])
+        console.log(focus, rows[focus[0]], cols[focus[1]])
+    }, [focus])
+
+    const handleZScoreChange = (zScore: number) => {
+        let row = 0
+        while (values[row][0] < zScore) {
+            row += 1
+        }
+        row -= 1
+        let best = 0
+        let bestRow = 0
+        let bestCol = 0
+        console.log(row, values[row])
+        if (values[row]) {
+            values[row].forEach((v: number, i: number) => {
+                if (Math.abs(v - zScore) < Math.abs(best - zScore)) {
+                    best = v
+                    bestRow = Math.trunc(i / 10) + row
+                    bestCol = Math.round(i % 10)
+                }
+            })
+        }
+        if (values[row + 1]) {
+            console.log(row + 1, values[row + 1])
+            values[row + 1].forEach((v: number, i: number) => {
+                if (Math.abs(v - zScore) < Math.abs(best - zScore)) {
+                    best = v
+                    bestRow = Math.trunc(i / 10) + row + 1
+                    bestCol = Math.round(i % 10)
+                }
+            })
+        }
+        if (values[row - 1]) {
+            console.log(row - 1, values[row - 1])
+            values[row - 1].forEach((v: number, i: number) => {
+                if (Math.abs(v - zScore) < Math.abs(best - zScore)) {
+                    best = v
+                    bestRow = Math.trunc(i / 10) + row - 1
+                    bestCol = Math.round(i % 10)
+                }
+            })
+        }
+        console.log(best, bestRow, bestCol)
+        setFocus([bestRow, bestCol])
+    }
 
     return (
         <main className="flex flex-col justify-start items-start px-4">
@@ -21,23 +71,35 @@ export default function Home() {
             <p>explanation of what a z-score is</p> */}
             <div className="flex flex-row justify-start items-start">
                 <div className="z-graph sticky top-0 flex flex-col items-start justify-start w-1/3 pt-16 mr-4">
-                    <Graph alpha={parseFloat(alpha)} />
-                    <div className="flex flex-row justify-center pt-8" style={{
-                        fontSize: "1.75rem",
-                        color: "#d35f5f"
-                    }}>
-                        <Latex>{`$z_{${alpha}}=${zScore}$`}</Latex>
-                    </div>
-                    <div className="flex flex-row justify-center" style={{
-                        fontSize: "1.75rem",
-                        color: "#37abc8"
-                    }}>
-                        { alpha[0] == "-" ? 
-                            <Latex>{`$0.5-z_{${alpha}}=${(0.5 - zScore).toFixed(4)}$`}</Latex> :
-                            <Latex>{`$1-z_{${alpha}}=${(1 - zScore).toFixed(4)}$`}</Latex>
-                        }
-                    </div>
-                    {/* <Equation /> */}
+                    <Graph alpha={alpha} />
+                    <Equation alpha={alpha} zScore={zScore}
+                        color={"red"}
+                        onAlphaChange={(alpha : string) => { // string bc of -0 case
+                            if (["-0", "-0.", "-0.0", "-0.00"].includes(alpha)) {
+                                setFocus([40, Math.round(Math.abs(parseFloat(alpha)*100%10))])
+                            }
+                            setFocus([rows.indexOf(Math.trunc(parseFloat(alpha)*10)/10), Math.round(Math.abs(parseFloat(alpha)*100%10))])
+                        }}
+                        onZScoreChange={(zScore : number) => {
+                            handleZScoreChange(zScore)
+                        }}
+                    />
+                    <Equation alpha={alpha} zScore={ parseFloat((zScore < 0.5 ? 0.5 - zScore : 1 - zScore).toFixed(4)) }
+                        color={"blue"}
+                        onAlphaChange={(alpha : string) => { // string bc of -0 case
+                            if (["-0", "-0.", "-0.0", "-0.00"].includes(alpha)) {
+                                setFocus([40, Math.round(Math.abs(parseFloat(alpha)*100%10))])
+                            }
+                            setFocus([rows.indexOf(Math.trunc(parseFloat(alpha)*10)/10), Math.round(Math.abs(parseFloat(alpha)*100%10))])
+                        }}
+                        onZScoreChange={(zScore : number) => {
+                            if (zScore < 0.5) {
+                                handleZScoreChange(0.5 - zScore)
+                            } else {
+                                handleZScoreChange(1 - zScore)
+                            }
+                        }}
+                    />
                 </div>            
                 <div className="z-table flex flex-col">
                     <div className="bg-white z-20 sticky top-0 w-full h-4"></div>
@@ -172,14 +234,14 @@ function Cell({ pos, value, rowIndex, hsl, type, focus, setFocus, mouseState, se
                 'border-l-2 border-r-2': (focused)
                     || (mouseState != "none" && pos[1] == focus[1]),
                 'border-t-2': (focused && mouseState != "none" && pos[0] == -1)
-                    || rowIndex == 35,
+                    || rowIndex == Math.ceil(values.length / 2),
                 'border-b-2': ((mouseState != "none" && pos[1] == focus[1])
                     && ([rows.length - 1, -1].includes(pos[0])))
-                    || rowIndex == 34,
+                    || rowIndex == Math.ceil(values.length / 2) - 1,
             })}>
-                <p className="text-md">{ 
-                    type == "row" && rowIndex == 34 ? "-0.0" :
-                    type == "row" && rowIndex == 35 ? "0.0" :
+                <p className="">{ 
+                    type == "row" && rowIndex == Math.ceil(values.length / 2) - 1 ? "-0.0" :
+                    type == "row" && rowIndex == Math.ceil(values.length / 2) ? "0.0" :
                     type == "cell" ? value.toFixed(4) : 
                     type == "col" ? value.toFixed(2) : 
                     type == "row" ? value.toFixed(1) : null
