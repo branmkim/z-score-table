@@ -11,34 +11,8 @@
     transition: margin 0.1s;
 }
 
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
-
-.light-1 {
-    background-color: #ffffff;
-}
-.accent-1 {
-    background-color: #dddddd;
-}
-.light-2 {
-    background-color: #eeeeee;
-}
-.accent-2 {
-    background-color: #dddddd;
-}
-.header-light-1 {
-    background-color: #cccccc;
-}
-.header-accent-1 {
-    background-color: #ffffff;
-}
-.header-light-2 {
-    background-color: #bbbbbb;
-}
-.header-accent-2 {
-    background-color: #ffffff;
 }

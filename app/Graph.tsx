@@ -1,6 +1,4 @@
 import 'katex/dist/katex.min.css'
-import Latex from 'react-latex-next'
-
 
 interface GraphProps {
     alpha: number
@@ -9,8 +7,8 @@ export default function Graph({ alpha }: GraphProps) {
     return (
         <>
         <div className="flex flex-col items-start justify-start">
-            <div className="relative flex flex-col h-2/5 items-center justify-center object-contain">
-                <img src="/normal_graph.svg" className="z-20 max-h-full" />
+            <div className="relative flex flex-col items-center justify-center object-contain">
+                <img src="/normal_graph.svg" className="z-20" />
                 <img src="/red_fill.svg" className={`z-10 dynamic-width absolute bottom-0 left-0 h-full object-cover object-left`}
                     style={{
                         width: 50 + ((50 / 3.5) * alpha) + "%",

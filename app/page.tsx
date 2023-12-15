@@ -69,9 +69,9 @@ export default function Home() {
         <main className="flex flex-col justify-start items-start px-4">
             {/* <h1 className="text-xl">Z-Score Table</h1>
             <p>explanation of what a z-score is</p> */}
-            <div className="flex flex-row justify-start items-start">
-                <div className="z-graph sticky top-0 flex flex-col items-start justify-start w-1/3 pt-16 mr-4">
-                    <Graph alpha={alpha} />
+            <div className="flex flex-col md:flex-row justify-center items-start">
+                <div className="z-graph sticky top-0 flex flex-col items-start justify-start md:w-1/3 w-full h-1/3 z-40 pt-4 md:pt-16 mr-8">
+                    <Graph alpha={alpha}/>
                     <Equation alpha={alpha} zScore={zScore}
                         color={"red"}
                         onAlphaChange={(alpha : string) => { // string bc of -0 case
@@ -100,12 +100,13 @@ export default function Home() {
                             }
                         }}
                     />
-                </div>            
+                </div>
+
                 <div className="z-table flex flex-col">
-                    <div className="bg-white z-20 sticky top-0 w-full h-4"></div>
+                    <div className="bg-white z-20 sticky md:top-0 w-full h-4"></div>
                     {/* col headers */}
                     <div className="flex flex-row z-20 sticky top-4">
-                        <div className="bg-white w-20"></div>
+                        <div className="bg-white w-16"></div>
                         { cols.map((c, ci) => {
                             return <Cell pos={[-1, ci]} value={cols[ci]} rowIndex={-1}
                             hsl={[0, 0, 90]}
@@ -206,40 +207,28 @@ function Cell({ pos, value, rowIndex, hsl, type, focus, setFocus, mouseState, se
                 } 
             }}
         >
-            <div className={classNames(`cell-content flex w-20 h-8 justify-center items-center mouse-${mouseState}`, {
+            <div className={classNames(`cell-content flex w-16 h-8 text-sm justify-center items-center mouse-${mouseState}`, {
                 'z-30 focused': mouseState != "none" && focused,
                 'z-0': !focused,
                 // colors
-                'light-1': alt && type == "cell" && !focused,
-                'accent-1': alt && type == "cell" && focused,
-                'light-2': !alt && type == "cell" && !focused,
-                'accent-2': !alt && type == "cell" && focused,
-                'header-light-1': alt && type != "cell" && !focused,
-                'header-accent-1': alt && type != "cell" && focused,
-                'header-light-2': !alt && type != "cell" && !focused,
-                'header-accent-2': !alt && type != "cell" && focused,
+                'bg-zinc-100': alt && type == "cell" && !focused,
+                'bg-zinc-300': !alt && type == "cell" && !focused,
+                'bg-zinc-600': alt && type != "cell" && !focused,
+                'bg-zinc-700': !alt && type != "cell" && !focused,
+                'bg-white': (alt && type == "cell" && focused)
+                        || (!alt && type == "cell" && focused)
+                        || (alt && type != "cell" && focused)
+                        || (!alt && type != "cell" && focused),
+                'text-zinc-200': !focused && (type == "row" || type == "col"),
                 // borders
                 'border-black': true,
-                // full border around focused headers and cell
                 'border-2': focused,
-                // top and bottom for row
-                // left cap for first in row, right cap for last in row
-                'border-t-2 border-b-2': (focused) 
-                    || (mouseState != "none" && pos[0] == focus[0]),
-                'border-l-2': focused && mouseState != "none" && pos[1] == -1,
-                'border-r-2': (mouseState != "none" && pos[0] == focus[0]) 
-                    && ([cols.length - 1, -1].includes(pos[1])),
-                // left and right for col
-                // top cap for first in col, bottom cap for last in row
-                'border-l-2 border-r-2': (focused)
-                    || (mouseState != "none" && pos[1] == focus[1]),
-                'border-t-2': (focused && mouseState != "none" && pos[0] == -1)
-                    || rowIndex == Math.ceil(values.length / 2),
-                'border-b-2': ((mouseState != "none" && pos[1] == focus[1])
-                    && ([rows.length - 1, -1].includes(pos[0])))
-                    || rowIndex == Math.ceil(values.length / 2) - 1,
+                'border-t-2 border-b-2': !focused && mouseState != "none" && (focus[0] == pos[0]),
+                'border-r-2': !focused && mouseState != "none" && (focus[0] == pos[0]) && (pos[1] == values[0].length - 1),
+                'border-l-2 border-r-2': !focused && mouseState != "none" && (focus[1] == pos[1]),
+                'border-b-2': !focused && mouseState != "none" && (focus[1] == pos[1]) && (pos[1] == values.length - 1),
             })}>
-                <p className="">{ 
+                <p className={`${type == "col" || type == "row" ? "font-bold" : ""}`}>{ 
                     type == "row" && rowIndex == Math.ceil(values.length / 2) - 1 ? "-0.0" :
                     type == "row" && rowIndex == Math.ceil(values.length / 2) ? "0.0" :
                     type == "cell" ? value.toFixed(4) : 
@@ -247,7 +236,7 @@ function Cell({ pos, value, rowIndex, hsl, type, focus, setFocus, mouseState, se
                     type == "row" ? value.toFixed(1) : null
                 }</p>
             </div>
-            <div className={`relative -ml-20 -z-10 w-20 h-8 bg-black`}></div>
+            <div className={`relative -ml-16 -z-10 w-16 h-8 bg-black`}></div>
         </div>
     )
 }

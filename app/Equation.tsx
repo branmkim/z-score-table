@@ -38,7 +38,7 @@ export default function Equation({ color, alpha, zScore, onAlphaChange, onZScore
             <p className="text-3xl">{ color == "red" ? "z" : 
                 alpha < 0 ? "0.5 - z" : "1 - z" 
             }</p>
-            <input className="relative text-2xl top-4 w-16 mx-2 pl-1 text-left bg-gray-100 rounded-md border-2 border-gray-300" 
+            <input className="relative text-2xl top-4 w-20 mx-2 pl-1 text-left bg-zinc-100 rounded-md border-2 border-zinc-300" 
                 type="text"
                 value={alphaStr}
                 onChange={(e) => {
@@ -52,7 +52,7 @@ export default function Equation({ color, alpha, zScore, onAlphaChange, onZScore
                 }}
                 />
             <p className="text-3xl">=</p>
-            <input className="relative text-3xl h-full w-28 mx-2 pl-1 text-left bg-gray-100 rounded-md border-2 border-gray-300" 
+            <input className="relative text-3xl h-full w-28 mx-2 pl-1 text-left bg-zinc-100 rounded-md border-2 border-zinc-300" 
                 type="text"
                 value={zScoreStr}
                 ref={zScoreRef}
